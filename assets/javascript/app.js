@@ -29,7 +29,6 @@ $("#submitButton").on("click",function (event) {
 	$("#first-train-input").val("");
 	$("#frequency-input").val("");
 
-	//console.log(trainName);
 
 	var train={
 		name: trainName,
@@ -37,7 +36,6 @@ $("#submitButton").on("click",function (event) {
 		first_time: firstTrainTime,
 		frequency: frequency
 	};
-	//console.log(train);
 
 	database.ref().push(train);
 	alert("good!");
@@ -45,23 +43,22 @@ $("#submitButton").on("click",function (event) {
 });
 
 database.ref().on("child_added", function(childSnapshot) {
-		entries++;
-		console.log(childSnapshot.val());
-		var entry= "<tr>"+"<td>"+childSnapshot.val().name+"</td>"+"<td>"+childSnapshot.val().destination+"</td>"
-		+"<td>"+childSnapshot.val().frequency+"</td>"+"<td id=\"next_arrival"+entries+"\""+"></td>"+
-		"<td id=\"minutes_away"+entries+ "\""+"></td>"+"</tr>";
-		console.log(entry);
-		$("#display").append(entry);
-		//console.log("heeeeyyy "+childSnapshot.val().first_time);
-		var firstTime=childSnapshot.val().first_time;
-		var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
-		var diff=moment().diff(moment(firstTimeConverted), "minutes");
-		console.log("diff is "+diff);
-		var frqn=childSnapshot.val().frequency;
-		var remainder=diff%frqn;
-		var minAway=frqn-remainder;
-		$("#minutes_away"+entries).text(minAway);
-		var nextTrainArrival=moment().add(minAway,"minutes").format("hh:mm");
-		$("#next_arrival"+entries).text(nextTrainArrival);
+	entries++;
+	console.log(childSnapshot.val());
+	var entry= "<tr>"+"<td>"+childSnapshot.val().name+"</td>"+"<td>"+childSnapshot.val().destination+"</td>"
+	+"<td>"+childSnapshot.val().frequency+"</td>"+"<td id=\"next_arrival"+entries+"\""+"></td>"+
+	"<td id=\"minutes_away"+entries+ "\""+"></td>"+"</tr>";
+	console.log(entry);
+	$("#display").append(entry);
+	var firstTime=childSnapshot.val().first_time;
+	var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
+	var diff=moment().diff(moment(firstTimeConverted), "minutes");
+	console.log("diff is "+diff);
+	var frqn=childSnapshot.val().frequency;
+	var remainder=diff%frqn;
+	var minAway=frqn-remainder;
+	$("#minutes_away"+entries).text(minAway);
+	var nextTrainArrival=moment().add(minAway,"minutes").format("hh:mm");
+	$("#next_arrival"+entries).text(nextTrainArrival);
 
-	});
+});
